@@ -34,13 +34,22 @@ module.exports = function(grunt) {
           var arr = file.split(";");
           console.log('your array is ',arr);
           var len = arr.length;
-          
-          var html = "<table class='table table-condensed table-striped'>";
+          var obj = {};
           for (var i = 0; i < len -1; i++) {
             var key_val = arr[i].split(":");
-            html += makeChip(key_val);
+            if(key_val.length === 1){ continue; }
+            obj[key_val[0]] = key_val[0]; 
           }
-          html += "</table>";
+
+          for (var key in obj) {
+             if (obj.hasOwnProperty(key)) {
+                var value = object[key];
+                if(value.indexOf('@') === 0){
+                  object[key] = object[value];
+                }
+             }
+          }
+          console.log('your object is ',obj);
           //grunt.file.write(dest,html);
         }
       });
