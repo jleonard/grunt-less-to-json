@@ -44,7 +44,7 @@ module.exports = function(grunt) {
           for (var key in obj) {
              if (obj.hasOwnProperty(key)) {
                 var value = obj[key];
-                if(value.indexOf('@') === 0){
+                if(value.indexOf('@') === 1){
                   obj[key] = obj[value];
                 }
              }
