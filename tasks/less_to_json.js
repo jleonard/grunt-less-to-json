@@ -24,34 +24,39 @@ module.exports = function(grunt) {
     this.files.forEach(function(fileObj){
       var files = grunt.file.expand({nonull: true}, fileObj.src);
       var dest = options.dest;
+      dest = dest.charAt(dest.length - 1) === '/' ? dest : dest + '/';
+
       var src = files.map(function(filepath){
+
         if (!grunt.file.exists(filepath)) {
           
         }else{
+
+          var file_name = filepath.split('/');
+          file_name = file_name[file_name.length -1].split('.');
+          file_name = file_name[0];
+
           var file = grunt.file.read(filepath);
           file = removeComments(file);
           file = file.replace(/ /g,"").replace(/\t/g,"").replace(/\n/g,"");
           var arr = file.split(";");
-          console.log('your array is ',arr);
           var len = arr.length;
           var obj = {};
           for (var i = 0; i < len -1; i++) {
             var key_val = arr[i].split(":");
             if(key_val.length === 1){ continue; }
-            obj[key_val[0]] = key_val[0]; 
+            obj[key_val[0]] = key_val[1]; 
           }
-
           for (var key in obj) {
              if (obj.hasOwnProperty(key)) {
                 var value = obj[key];
-                if(value.indexOf('@') === 1){
-                  console.log('value ',value);
+                if(value.indexOf('@') === 0){
                   obj[key] = obj[value];
                 }
              }
           }
-          console.log('your object is ',obj);
-          //grunt.file.write(dest,html);
+          var data = JSON.stringify(obj);
+          grunt.file.write(dest + file_name+'.json',data);
         }
       });
 
